@@ -5,28 +5,25 @@ let computerSelection;
 
 let computerScore = 0;
 let playerScore = 0;
+let tieScore = 0;
 
 function computerPlay() {
  return gameArray[~~(Math.random() * gameArray.length)];
 }
 
 function playRound(playerSelection, computerSelection) {
-
-    playerSelection = (prompt("Play!", "")).toLowerCase();
+    
     computerSelection = computerPlay().toLowerCase();
-
     if (playerSelection == computerSelection) {
-        return(`You tied! Are you a computer too? Score: ${playerScore} - ${computerScore}`);
+        ++tieScore;
     } else if (
             (playerSelection == "rock" && computerSelection == "paper") ||
             (playerSelection == "paper" && computerSelection == "scissors") ||
             (playerSelection == "scissors" && computerSelection == "rock")
     ) {
-        return(`You lost! ${capitalize(computerSelection)} beats ${capitalize(playerSelection)}. Man will never overtake machine!
-                Score: ${playerScore} - ${++computerScore}`);
+        ++computerScoreText.textContent;
     } else {
-        return(`You won! ${capitalize(playerSelection)} beats ${capitalize(computerSelection)}. You're smarter than our robot!
-        Score: ${++playerScore} - ${computerScore}`);
+        ++playerScoreText.textContent;
     }
 }
 
@@ -34,15 +31,25 @@ function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
-function game() {
-    alert(playRound(playerSelection, computerSelection));
-    alert(playRound(playerSelection, computerSelection));
-    alert(playRound(playerSelection, computerSelection));
-    alert(playRound(playerSelection, computerSelection));
-    alert(playRound(playerSelection, computerSelection));
-    alert(`The score was ${playerScore} - ${computerScore}`)
-    playerScore = 0;
-    computerScore = 0;
-}
+  const buttons = document.querySelectorAll('button');
 
-console.log(game());
+  buttons.forEach((button) => {
+    button.addEventListener('click', () => {
+        playRound(button.id, computerSelection);
+      });
+    });
+
+const container = document.querySelector(".container")
+const playerScoreView = document.createElement('div');
+const computerScoreView = document.createElement('div');
+const playerScoreText = document.createElement('p');
+const computerScoreText = document.createElement('p');
+
+playerScoreText.textContent = `0`
+computerScoreText.textContent = `0`
+
+playerScoreView.appendChild(playerScoreText);
+computerScoreView.appendChild(computerScoreText);
+
+container.appendChild(playerScoreView);
+container.appendChild(computerScoreView);
